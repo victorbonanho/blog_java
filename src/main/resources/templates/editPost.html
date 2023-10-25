@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyCodeBlog</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote-bs4.css" rel="stylesheet">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote-bs4.js"></script>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-light bg-light">
+            <span class="navbar-brand mb-0 h1" style="font-weight: bold; margin-left: 20px;">MyCodeBlog</span>
+        </nav>
+    </header>
+
+    <section>
+        <div class="container" style="width: 60%; padding-bottom: 30px;">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb" style="background-color: white; padding-left: 0px; margin-top: 50px;">
+                    <li class="breadcrumb-item"><a th:href="@{/posts}">Posts</a></li>
+                    <li class="breadcrumb-item active">Editar Post</li>
+                </ol>
+            </nav>
+            
+            <div>
+				<th:block th:include="mensagemValidacao"></th:block>
+                <form th:object="${post}" method="post" th:action="@{'/posts/edit/' + ${post.id}}" id="editForm" style="display: flex; flex-direction: column; gap: 20px;">
+				    <input type="hidden" th:field="*{id}">
+				    <input type="hidden" name="_method" value="PUT">
+				    <div class="form-group">
+				        <input type="text" class="form-control" placeholder="Título *" th:field="*{titulo}">
+				    </div>
+				    <div class="form-group">
+				        <input type="text" class="form-control" placeholder="Autor *" th:field="*{autor}">
+				    </div>
+				    
+				    <textarea id="summernote" class="form-control" th:field="${post.texto}" placeholder="Texto *"></textarea>
+				    
+				    <small class="form-text text-muted">(*) Campos obrigatórios</small>
+				    
+				    <button type="submit" class="btn btn-primary" style="margin-top: 10px;" onclick="submitFormAsPut(event)">Salvar</button>
+				    <a th:href="@{/posts}" class="btn btn-light" role="button" style="margin-top: 10px;">Cancelar</a>
+				</form>
+
+
+            </div>
+        </div>
+    </section>
+    <script>
+		$('#summernote').summernote({
+			placeholder: 'Texto *',
+			tabsize: 2,
+			height: 300
+		});
+	</script>
+    <script>[]
+	    function submitFormAsPut(event) {
+		    event.preventDefault(); // Evitar o envio do formulário padrão (POST)
+		    const form = document.getElementById("editForm");
+		    form.submit(); // Envie o formulário com o método PUT
+		}
+	</script>
+	
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+</body>
+</html>
